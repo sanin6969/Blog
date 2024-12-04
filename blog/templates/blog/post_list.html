@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function togglePosts() {
+            const allPosts = document.getElementById('all-posts');
+            const filteredPosts = document.getElementById('filtered-posts');
+            const toggleCheckbox = document.getElementById('toggle-checkbox');
+            const buttonLabel = document.getElementById('toggle-label');
+    
+            const clientCountry = "{{ country|escapejs }}"; 
+    
+            if (toggleCheckbox.checked) {
+                allPosts.classList.add('hidden');
+                filteredPosts.classList.remove('hidden');
+                buttonLabel.innerText = `Show All Posts`;
+            } else {
+                allPosts.classList.remove('hidden');
+                filteredPosts.classList.add('hidden');
+                buttonLabel.innerText = `Show Filtered Posts by Country (${clientCountry})`;
+            }
+        }
+    </script>
+    
+</head>
+
+<body class="bg-gray-100 font-sans leading-normal tracking-normal">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-800">Blog Posts</h1>
+            <div class="flex items-center">
+                <span id="toggle-label" class="text-xl font-semibold text-gray-700 mr-4">Show Filtered Posts by Country</span>
+                <label for="toggle-checkbox" class="cursor-pointer">
+                    <input 
+                        id="toggle-checkbox"
+                        type="checkbox" 
+                        class="appearance-none w-[4em] h-[2em] bg-gradient-to-r from-gray-200 via-gray-200 to-gray-800 bg-[length:205%] bg-left rounded-full relative cursor-pointer transition-all duration-400 
+                        before:content-[''] before:absolute before:w-[1.5em] before:h-[1.5em] before:top-[0.25em] before:left-[0.25em] 
+                        before:bg-gradient-to-r before:from-gray-200 before:via-gray-200 before:to-gray-800 before:bg-[length:205%] 
+                        before:bg-right before:rounded-full before:transition-all before:duration-400
+                        checked:bg-right checked:bg-[length:205%]
+                        checked:before:left-[calc(100%-1.5em-0.25em)] checked:before:bg-left"
+                        onchange="togglePosts()"
+                    />
+                </label>
+            </div>
+        </div>
+
+        <div id="all-posts" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for post in posts %}
+            <div class="relative w-60 h-64 bg-white shadow-xl rounded-xl overflow-hidden group transition-all duration-300 hover:scale-105">
+                <div class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 group-hover:opacity-0">
+                    <h2 class="text-xl font-bold text-gray-800">{{ post.title }}</h2>
+                </div>
+                <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div class="absolute top-4 left-4 text-gray-800 font-bold text-lg">
+                        {{ post.title }}
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center text-center px-6">
+                        <p class="text-md font-medium text-gray-700">
+                            {{ post.content }}
+                        </p>
+                    </div>
+                    <div class="absolute bottom-4 right-4 text-gray-600 text-sm">
+                        {{ post.created_at }}
+                    </div>
+                    <div class="absolute bottom-4 left-4 text-gray-600 text-sm">
+                        {{ post.country }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div id="filtered-posts" class="hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            {% for post in filtered_posts %}
+            <div class="relative w-60 h-64 bg-white shadow-xl rounded-xl overflow-hidden group transition-all duration-300 hover:scale-105">
+                <div class="absolute inset-0 flex items-center justify-center transition-opacity duration-300 group-hover:opacity-0">
+                    <h2 class="text-xl font-bold text-gray-800">{{ post.title }}</h2>
+                </div>
+                <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div class="absolute top-4 left-4 text-gray-800 font-bold text-lg">
+                        {{ post.title }}
+                    </div>
+                    <div class="absolute inset-0 flex items-center justify-center text-center px-6">
+                        <p class="text-md font-medium text-gray-700">
+                            {{ post.content }}
+                        </p>
+                    </div>
+                    <div class="absolute bottom-4 right-4 text-gray-600 text-sm">
+                        {{ post.created_at }}
+                    </div>
+                    <div class="absolute bottom-4 left-4 text-gray-600 text-sm">
+                        {{ post.country }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+
+</html>
